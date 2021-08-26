@@ -11,11 +11,11 @@ import App from "../src/App";
 const PORT = process.env.PORT || 3006;
 const app = express();
 
-app.get("/*", (req, res) => {
+app.get("/*", (req: express.Request, res: express.Response) => {
   const app = ReactDOMServer.renderToString(
-    React.createElement(StaticRouter, { location: req.url }, [
-      React.createElement(App),
-    ])
+    <StaticRouter location={req.url}>
+      <App />
+    </StaticRouter>
   );
 
   const indexFile = path.resolve("./build/index.html");
@@ -30,7 +30,6 @@ app.get("/*", (req, res) => {
     );
   });
 });
-
 
 app.use(express.static('./build'));
 
