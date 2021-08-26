@@ -4,14 +4,19 @@ import fs from "fs";
 import React from "react";
 import express from "express";
 import ReactDOMServer from "react-dom/server";
+import { StaticRouter } from "react-router-dom"
 
 import App from "../src/App";
 
 const PORT = process.env.PORT || 3006;
 const app = express();
 
-app.get("/", (req, res) => {
-  const app = ReactDOMServer.renderToString(React.createElement(App));
+app.get("/*", (req, res) => {
+  const app = ReactDOMServer.renderToString(
+    React.createElement(StaticRouter, { location: req.url }, [
+      React.createElement(App),
+    ])
+  );
 
   const indexFile = path.resolve("./build/index.html");
   fs.readFile(indexFile, "utf8", (err, data) => {
