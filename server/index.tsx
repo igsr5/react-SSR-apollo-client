@@ -1,11 +1,12 @@
 import path from "path";
 import fs from "fs";
+import fetch from 'cross-fetch';
 
 import React from "react";
 import express from "express";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom"
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 import App from "../src/App";
 
@@ -15,11 +16,9 @@ const app = express();
 app.get("/*", (req: express.Request, res: express.Response) => {
   const client = new ApolloClient({
     ssrMode: true,
-    link: createHttpLink({
+    link: new HttpLink({
       uri: 'https://graphql.org/swapi-graphql/',
-      headers: {
-        cookie: req.header('Cookie'),
-      },
+      fetch
     }),
     cache: new InMemoryCache(),
   });
