@@ -1,5 +1,6 @@
 import React from 'react';
 import Home from './Home';
+import About from './About';
 import { Route } from 'react-router-dom';
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 
@@ -13,6 +14,9 @@ const App: React.FC<AppProps> = (props) => {
       <div className="App">
         <Route path="/home">
           <Home name="Sammy"></Home>
+        </Route>
+        <Route path="/about">
+          <About></About>
         </Route>
       </div>
     </ApolloProvider>
