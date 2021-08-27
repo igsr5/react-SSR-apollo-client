@@ -7,13 +7,14 @@ import express from "express";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom"
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { renderToStringWithData } from "@apollo/client/react/ssr";
 
 import App from "../src/App";
 
 const PORT = process.env.PORT || 3006;
 const app = express();
 
-app.get("/*", (req: express.Request, res: express.Response) => {
+app.get("/*", async (req: express.Request, res: express.Response) => {
   const client = new ApolloClient({
     ssrMode: true,
     link: new HttpLink({
@@ -23,7 +24,7 @@ app.get("/*", (req: express.Request, res: express.Response) => {
     cache: new InMemoryCache(),
   });
 
-  const app = ReactDOMServer.renderToString(
+  const app = await renderToStringWithData(
     <StaticRouter location={req.url}>
       <App client={client} />
     </StaticRouter>
