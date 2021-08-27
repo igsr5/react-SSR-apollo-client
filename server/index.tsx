@@ -5,6 +5,7 @@ import React from "react";
 import express from "express";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom"
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 
 import App from "../src/App";
 
@@ -12,9 +13,20 @@ const PORT = process.env.PORT || 3006;
 const app = express();
 
 app.get("/*", (req: express.Request, res: express.Response) => {
+  const client = new ApolloClient({
+    ssrMode: true,
+    link: createHttpLink({
+      uri: 'https://graphql.org/swapi-graphql/',
+      headers: {
+        cookie: req.header('Cookie'),
+      },
+    }),
+    cache: new InMemoryCache(),
+  });
+
   const app = ReactDOMServer.renderToString(
     <StaticRouter location={req.url}>
-      <App />
+      <App client={client} />
     </StaticRouter>
   );
 
